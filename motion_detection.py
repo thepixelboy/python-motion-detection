@@ -16,6 +16,9 @@ while True:
     delta_frame_threshold = cv2.threshold(
         delta_frame, 30, 255, cv2.THRESH_BINARY
     )[1]
+    delta_frame_threshold = cv2.dilate(
+        delta_frame_threshold, None, iterations=2
+    )
 
     cv2.imshow("Grayscale Frame", grayscale_frame)
     cv2.imshow("Delta Frame", delta_frame)

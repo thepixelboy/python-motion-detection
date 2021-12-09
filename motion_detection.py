@@ -13,16 +13,31 @@ while True:
         continue
 
     delta_frame = cv2.absdiff(first_frame, grayscale_frame)
-    delta_frame_threshold = cv2.threshold(
-        delta_frame, 30, 255, cv2.THRESH_BINARY
-    )[1]
-    delta_frame_threshold = cv2.dilate(
-        delta_frame_threshold, None, iterations=2
+    threshold_frame = cv2.threshold(delta_frame, 30, 255, cv2.THRESH_BINARY)[1]
+    threshold_frame = cv2.dilate(threshold_frame, None, iterations=2)
+
+    # create contours
+    (cnts, _) = cv2.findContours(
+        threshold_frame.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
     )
+
+    for contour in cnts:
+        if cv2.contourArea(contour) < 1000:
+            continue
+
+        (x_pos, y_pos, width, height) = cv2.boundingRect(contour)
+        cv2.rectangle(
+            frame,
+            (x_pos, y_pos),
+            (x_pos + width, y_pos + height),
+            (0, 255, 0),
+            3,
+        )
 
     cv2.imshow("Grayscale Frame", grayscale_frame)
     cv2.imshow("Delta Frame", delta_frame)
-    cv2.imshow("Threshold Frame", delta_frame_threshold)
+    cv2.imshow("Threshold Frame", threshold_frame)
+    cv2.imshow("Color Frame", frame)
 
     key = cv2.waitKey(1)
 

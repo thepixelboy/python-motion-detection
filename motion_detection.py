@@ -3,7 +3,7 @@ from datetime import datetime
 import cv2
 
 first_frame = None
-status_list = []
+status_list = [None, None]
 time_list = []
 
 video = cv2.VideoCapture(0)
@@ -57,9 +57,12 @@ while True:
     key = cv2.waitKey(1)
 
     if key == ord("q"):
+        if status == 1:
+            time_list.append(datetime.now())
         break
 
-print(status_list)
+print(f"Status list: {status_list}")
+print(f"Time list: {time_list}")
 
 video.release()
 cv2.destroyAllWindows()

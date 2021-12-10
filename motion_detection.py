@@ -1,10 +1,12 @@
 import cv2
 
 first_frame = None
+status_list = []
 video = cv2.VideoCapture(0)
 
 while True:
     check, frame = video.read()
+    status = 0
     grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     grayscale_frame = cv2.GaussianBlur(grayscale_frame, (21, 21), 0)
 
@@ -22,8 +24,10 @@ while True:
     )
 
     for contour in cnts:
-        if cv2.contourArea(contour) < 1000:
+        if cv2.contourArea(contour) < 10000:
             continue
+
+        status = 1
 
         (x_pos, y_pos, width, height) = cv2.boundingRect(contour)
         cv2.rectangle(
@@ -34,6 +38,8 @@ while True:
             3,
         )
 
+    status_list.append(status)
+
     cv2.imshow("Grayscale Frame", grayscale_frame)
     cv2.imshow("Delta Frame", delta_frame)
     cv2.imshow("Threshold Frame", threshold_frame)
@@ -43,6 +49,8 @@ while True:
 
     if key == ord("q"):
         break
+
+print(status_list)
 
 video.release()
 cv2.destroyAllWindows()

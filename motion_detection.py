@@ -1,10 +1,17 @@
 from datetime import datetime
 
 import cv2
+import pandas
 
 first_frame = None
 status_list = [None, None]
 time_list = []
+df = pandas.DataFrame(
+    columns=[
+        "Start",
+        "End",
+    ]
+)
 
 video = cv2.VideoCapture(0)
 
@@ -61,8 +68,12 @@ while True:
             time_list.append(datetime.now())
         break
 
-print(f"Status list: {status_list}")
-print(f"Time list: {time_list}")
+for i in range(0, len(time_list), 2):
+    df = df.append(
+        {"Start": time_list[i], "End": time_list[i + 1]}, ignore_index=True
+    )
+
+df.to_csv("detection_times.csv")
 
 video.release()
 cv2.destroyAllWindows()

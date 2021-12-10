@@ -1,7 +1,11 @@
+from datetime import datetime
+
 import cv2
 
 first_frame = None
 status_list = []
+time_list = []
+
 video = cv2.VideoCapture(0)
 
 while True:
@@ -39,6 +43,11 @@ while True:
         )
 
     status_list.append(status)
+
+    if status_list[-1] == 1 and status_list[-2] == 0:
+        time_list.append(datetime.now())
+    if status_list[-1] == 0 and status_list[-2] == 1:
+        time_list.append(datetime.now())
 
     cv2.imshow("Grayscale Frame", grayscale_frame)
     cv2.imshow("Delta Frame", delta_frame)

@@ -74,7 +74,7 @@ for i in range(0, len(time_list), 2):
         {"Start": time_list[i], "End": time_list[i + 1]}, ignore_index=True
     )
 
-df.to_csv("detection_times.csv")
+df.to_csv("webcam_datacsv")
 
 video.release()
 cv2.destroyAllWindows()
